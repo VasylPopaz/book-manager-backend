@@ -1,4 +1,4 @@
-import { addBook, getAllBooks } from "../services/index.js";
+import { addBook, getAllBooks, updateBookByIsbn } from "../services/index.js";
 import { ctrlWrapper, httpError } from "../helpers/index.js";
 
 export const getBooks = async (req, res) => {
@@ -40,7 +40,19 @@ const createBook = async (req, res) => {
   res.status(201).json(result);
 };
 
+const updateBook = async (req, res) => {
+  const { isbn } = req.params;
+  const result = await updateBookByIsbn({ isbn }, req.body);
+
+  if (!result) {
+    throw httpError(404);
+  }
+
+  res.json(result);
+};
+
 export default {
   getBooks: ctrlWrapper(getBooks),
   createBook: ctrlWrapper(createBook),
+  updateBook: ctrlWrapper(updateBook),
 };

@@ -27,3 +27,11 @@ export const addBook = async (data) => {
 
   return newBook;
 };
+
+export const updateBookByIsbn = async (filter, data) => {
+  const updatedBook = await Book.findOneAndUpdate(filter, data, {
+    new: true,
+  });
+
+  return updatedBook;
+};

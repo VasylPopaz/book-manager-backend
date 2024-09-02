@@ -1,25 +1,23 @@
 import { Book } from "../models/Book.js";
 
-export const getAllBooks = async (filter = {}, sort = null) => {
-  let sortOptions = {};
-
-  if (sort) {
-    if (sort.byTitle) {
-      sortOptions.title = sort.byTitle === "true" ? 1 : -1;
+export const getAllBooks = async (filter = {}, sort = {}) => {
+  const sortOptions = Object.entries(sort).reduce((acc, [key, value]) => {
+    if (key === "byTitle" || key === "byAuthor" || key === "byIsbn") {
+      acc[key.replace("by", "").toLowerCase()] = value === "true" ? 1 : -1;
     }
-    if (sort.byAuthor) {
-      sortOptions.author = sort.byAuthor === "true" ? 1 : -1;
-    }
-    if (sort.byIsbn) {
-      sortOptions.isbn = sort.byIsbn === "true" ? 1 : -1;
-    }
-  }
+    return acc;
+  }, {});
 
-  const books = await Book.find(filter, "title author isbn isBorrowed")
-    .sort(sortOptions)
-    .exec();
+  Object.keys(filter).forEach((key) => {
+    if (["title", "author"].includes(key)) {
+      filter[key] = new RegExp(filter[key], "i");
+    }
+  });
 
-  const totalBooks = await Book.countDocuments();
+  const [books, totalBooks] = await Promise.all([
+    Book.find(filter, "title author isbn isBorrowed").sort(sortOptions).exec(),
+    Book.countDocuments(filter),
+  ]);
 
   return { books, totalBooks };
 };

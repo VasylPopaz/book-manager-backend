@@ -1,2 +1,2 @@
-export * from "./isValidId.js";
+export * from "./isValidIsbn.js";
 export * from "./validateBody.js";

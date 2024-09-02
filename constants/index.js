@@ -1,1 +1,1 @@
-export * from "./isbnRegExp.js";
+export * from "./isbnRegexp.js";

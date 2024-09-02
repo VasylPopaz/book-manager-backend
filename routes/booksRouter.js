@@ -2,7 +2,10 @@ import express from "express";
 
 import booksControllers from "../controllers/booksControllers.js";
 import { isValidIsbn, validateBody } from "../middlewares/index.js";
-import { createBookSchema } from "../schemas/booksSchemas.js";
+import {
+  createBookSchema,
+  updateStatusBookSchema,
+} from "../schemas/booksSchemas.js";
 
 export const booksRouter = express.Router();
 
@@ -16,6 +19,12 @@ booksRouter.put(
   "/:isbn",
   isValidIsbn,
   validateBody(createBookSchema),
+  booksControllers.updateBook
+);
+booksRouter.patch(
+  "/:isbn",
+  isValidIsbn,
+  validateBody(updateStatusBookSchema),
   booksControllers.updateBook
 );
 booksRouter.delete("/:isbn", isValidIsbn, booksControllers.deleteBook);

@@ -13,7 +13,10 @@ export const app = express();
 app.use(morgan("tiny"));
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://book-manager-rho-six.vercel.app",
+    ],
     credentials: true,
   })
 );

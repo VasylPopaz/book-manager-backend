@@ -1,4 +1,9 @@
-import { addBook, getAllBooks, updateBookByIsbn } from "../services/index.js";
+import {
+  addBook,
+  getAllBooks,
+  removeBook,
+  updateBookByIsbn,
+} from "../services/index.js";
 import { ctrlWrapper, httpError } from "../helpers/index.js";
 
 export const getBooks = async (req, res) => {
@@ -51,8 +56,20 @@ const updateBook = async (req, res) => {
   res.json(result);
 };
 
+const deleteBook = async (req, res) => {
+  const { isbn } = req.params;
+  const result = await removeBook({ isbn });
+
+  if (!result) {
+    throw httpError(404);
+  }
+
+  res.json(result);
+};
+
 export default {
   getBooks: ctrlWrapper(getBooks),
   createBook: ctrlWrapper(createBook),
   updateBook: ctrlWrapper(updateBook),
+  deleteBook: ctrlWrapper(deleteBook),
 };

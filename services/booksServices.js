@@ -35,3 +35,9 @@ export const updateBookByIsbn = async (filter, data) => {
 
   return updatedBook;
 };
+
+export const removeBook = async (filter) => {
+  const deletedBook = await Book.findOneAndDelete(filter);
+
+  return deletedBook;
+};

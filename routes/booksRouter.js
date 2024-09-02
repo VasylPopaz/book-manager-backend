@@ -18,3 +18,4 @@ booksRouter.put(
   validateBody(createBookSchema),
   booksControllers.updateBook
 );
+booksRouter.delete("/:isbn", isValidIsbn, booksControllers.deleteBook);

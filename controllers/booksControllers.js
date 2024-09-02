@@ -1,5 +1,5 @@
-import { getAllBooks } from "../services/index.js";
-import { ctrlWrapper } from "../helpers/index.js";
+import { addBook, getAllBooks } from "../services/index.js";
+import { ctrlWrapper, httpError } from "../helpers/index.js";
 
 export const getBooks = async (req, res) => {
   const sort = Object.keys(req.query)
@@ -23,6 +23,24 @@ export const getBooks = async (req, res) => {
   res.json(result);
 };
 
+const createBook = async (req, res) => {
+  const { isbn } = req.body;
+
+  const { books } = await getAllBooks({ isbn });
+
+  if (books.length) {
+    throw httpError(
+      409,
+      "A book with the ISBN you have entered already exists in the database. Please check the ISBN number and try again."
+    );
+  }
+
+  const result = await addBook(req.body);
+
+  res.status(201).json(result);
+};
+
 export default {
   getBooks: ctrlWrapper(getBooks),
+  createBook: ctrlWrapper(createBook),
 };

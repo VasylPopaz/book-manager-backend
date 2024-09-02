@@ -21,3 +21,9 @@ export const getAllBooks = async (filter = {}, sort = {}) => {
 
   return { books, totalBooks };
 };
+
+export const addBook = async (data) => {
+  const newBook = await Book.create(data);
+
+  return newBook;
+};

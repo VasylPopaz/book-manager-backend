@@ -26,7 +26,7 @@ export const getBooks = async (req, res) => {
 const createBook = async (req, res) => {
   const { isbn } = req.body;
 
-  const { books } = await getAllBooks({ isbn });
+  const { books } = await getAllBooks(isbn);
 
   if (books.length) {
     throw httpError(

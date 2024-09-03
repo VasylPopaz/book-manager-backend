@@ -1,3 +1,4 @@
+import { httpError } from "../helpers/httpError.js";
 import { Book } from "../models/Book.js";
 
 export const getAllBooks = async (query = {}, sort = {}) => {
@@ -10,7 +11,6 @@ export const getAllBooks = async (query = {}, sort = {}) => {
         ],
       }
     : {};
-
   const sortOptions = Object.entries(sort).reduce((acc, [key, value]) => {
     if (key === "byTitle" || key === "byAuthor" || key === "byIsbn") {
       acc[key.replace("by", "").toLowerCase()] = value === "true" ? 1 : -1;
@@ -33,11 +33,21 @@ export const addBook = async (data) => {
 };
 
 export const updateBookByIsbn = async (filter, data) => {
-  const updatedBook = await Book.findOneAndUpdate(filter, data, {
-    new: true,
-  });
+  try {
+    const updatedBook = await Book.findOneAndUpdate(filter, data, {
+      new: true,
+    });
 
-  return updatedBook;
+    return updatedBook;
+  } catch (error) {
+    if (error.codeName === "DuplicateKey") {
+      throw httpError(
+        409,
+        "A book with the ISBN you have entered already exists in the database. Please check the ISBN number and try again."
+      );
+    }
+    throw httpError(409);
+  }
 };
 
 export const removeBook = async (filter) => {

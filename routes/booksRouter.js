@@ -22,7 +22,7 @@ booksRouter.put(
   booksControllers.updateBook
 );
 booksRouter.patch(
-  "/:isbn",
+  "/:isbn/borrow",
   isValidIsbn,
   validateBody(updateStatusBookSchema),
   booksControllers.updateBook

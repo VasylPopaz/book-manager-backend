@@ -7,6 +7,8 @@ import {
 import { ctrlWrapper, httpError } from "../helpers/index.js";
 
 export const getBooks = async (req, res) => {
+  const query = req.query.query || "";
+
   const sort = Object.keys(req.query)
     .filter(
       (key) => key === "byTitle" || key === "byAuthor" || key === "byIsbn"
@@ -16,14 +18,7 @@ export const getBooks = async (req, res) => {
       return obj;
     }, {});
 
-  const filter = Object.keys(req.query)
-    .filter((key) => !["byTitle", "byAuthor", "byIsbn"].includes(key))
-    .reduce((obj, key) => {
-      obj[key] = req.query[key];
-      return obj;
-    }, {});
-
-  const result = await getAllBooks(filter, sort);
+  const result = await getAllBooks(query, sort);
 
   res.json(result);
 };

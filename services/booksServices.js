@@ -11,9 +11,12 @@ export const getAllBooks = async (query = {}, sort = {}) => {
         ],
       }
     : {};
+
   const sortOptions = Object.entries(sort).reduce((acc, [key, value]) => {
     if (key === "byTitle" || key === "byAuthor" || key === "byIsbn") {
       acc[key.replace("by", "").toLowerCase()] = value === "true" ? 1 : -1;
+    } else if (key === "byStatus") {
+      acc["isBorrowed"] = value === "true" ? 1 : -1;
     }
     return acc;
   }, {});

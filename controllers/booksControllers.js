@@ -11,7 +11,11 @@ export const getBooks = async (req, res) => {
 
   const sort = Object.keys(req.query)
     .filter(
-      (key) => key === "byTitle" || key === "byAuthor" || key === "byIsbn"
+      (key) =>
+        key === "byTitle" ||
+        key === "byAuthor" ||
+        key === "byIsbn" ||
+        key === "byStatus"
     )
     .reduce((obj, key) => {
       obj[key] = req.query[key];

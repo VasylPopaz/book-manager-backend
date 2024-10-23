@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 
 import { booksRouter } from "./routes/booksRouter.js";
+import { pingService } from "./services/pingService.js";
 
 const { DB_HOST, PORT } = process.env;
 
@@ -23,6 +24,10 @@ app.use(
 app.use(express.json());
 
 app.use("/api/books", booksRouter);
+
+app.get("/ping", (req, res) => {
+  res.status(200).json({ message: "Online." });
+});
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
@@ -44,3 +49,5 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
+pingService();
